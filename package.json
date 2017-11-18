@@ -1,9 +1,10 @@
 {
-  "name": "heroku-cra-node",
-  "version": "1.0.0",
-  "description": "How to use create-react-app with a custom Node API on Heroku",
+  "name": "fivetwoone",
+  "version": "0.0.1",
+  "private": true,
+  "description": "a helpful app for choosing where to eat",
   "engines": {
-    "node": "6.11.x"
+    "node": "8.9.0"
   },
   "scripts": {
     "start": "node server",
@@ -19,14 +20,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/mars/heroku-cra-node.git"
-  },
-  "keywords": [
-    "node",
-    "heroku",
-    "create-react-app",
-    "react"
-  ],
-  "license": "MIT",
-  "devDependencies": {}
+    "url": "https://github.com/blanebaumgartner/FiveTwoOne"
+  }
 }
