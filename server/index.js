@@ -31,12 +31,11 @@ function initializeData() {
 }
 
 io.on('connection', (socket) => {
-  console.log('client connected to fivetwoone001 server: ' + socket.id);
-
+  serverMessage('Client ' + socket.id + ' connected.');
   sendAppData();
 
   socket.on('clientClickedRestaurant', (r) => {
-    console.log('client clicked ' + r);
+    serverMessage('Client clicked ' + r + '.');
     if (status === 0) { //if choosing five
       const i = selected.indexOf(r);
       if (i === -1) { //if restaurant not previously selected
@@ -78,7 +77,7 @@ io.on('connection', (socket) => {
     allRestaurants.sort();
     const json = JSON.stringify(allRestaurants);
     fs.writeFile('server/restaurants.json', json, 'utf8', () => {
-      console.log('wrote new restaurant to file');
+      serverMessage('Added ' + r + ' to file');
     });
     sendAppData();
   });
@@ -88,13 +87,13 @@ io.on('connection', (socket) => {
     allRestaurants.splice(i, 1);
     const json = JSON.stringify(allRestaurants);
     fs.writeFile('server/restaurants.json', json, 'utf8', () => {
-      console.log('removed restaurant and wrote file')
+      serverMessage('Removed ' + r + ' and wrote file.')
     });
     sendAppData();
   });
 
   socket.on('clientClickedBack', () => {
-    console.log('client clicked Back');
+    serverMessage('Client clicked Back.');
     if (status === 2) {
       status--;
       twoReached = false;
@@ -112,14 +111,14 @@ io.on('connection', (socket) => {
   });
 
   socket.on('clientClickedReset', () => {
-    console.log('client clicked Reset');
+    serverMessage('Client ' + socket.id + ' clicked Reset.');
     initializeData();
     sendAppData();
   });
 });
 
 server.listen(port, () => {
-  console.log('fivetwoone001 server listening on port ' + port);
+  serverMessage('Listening on port ' + port + '.');
 });
 
 function sendAppData() {
@@ -128,7 +127,7 @@ function sendAppData() {
 }
 
 function buildData() {
-  let title = '';
+  let title;
   if (status === 0) {
     title = 'Choose 5';
   } else if (status === 1) {
@@ -144,4 +143,8 @@ function buildData() {
     }
   }
   return data;
+}
+
+function serverMessage(text) {
+  console.log('SERVER: ' + text);
 }
