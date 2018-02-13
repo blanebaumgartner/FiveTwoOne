@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Menu, Container, Header, List, Step, Loader, Button, Segment, Icon, Sticky } from 'semantic-ui-react';
 //import { CSSTransitionGroup } from 'react-transition-group';
 //import logo from './logo.svg';
 import './App.css';
@@ -7,14 +6,6 @@ import './App.css';
 import io from 'socket.io-client';
 
 const socket = io();
-
-const menuStyle = {
-
-}
-
-const listItemStyle = {
-  fontSize: '0.9em'
-}
 
 class App extends Component {
   constructor(props) {
@@ -40,48 +31,67 @@ class App extends Component {
     });
   }
 
+  listItemClicked(item) {
+    console.log('listItemClicked: ' + item);
+    let selectedRestaurants = this.state.restaurants.selected;
+    const i = selectedRestaurants.indexOf(item);
+    if (i < 0) {
+      selectedRestaurants.push(item);
+    } else {
+      selectedRestaurants.splice(i, 1);
+    }
+
+    this.setState((prevState) => {
+      return {
+        restaurants: {
+          shown: prevState.restaurants.shown,
+          selected: selectedRestaurants
+        }
+      };
+    });
+    socket.emit('clientClickedRestaurant', item);
+  }
+
+  homeClicked() {
+    socket.emit('clientClickedReset');
+  }
+
   render() {
-    const t = this.state.title;
+    //const t = this.state.title;
     const r = this.state.restaurants;
     const noData = !this.state.receivedData;
-    const allowEditing = (r.selected[0] === undefined && t === 'Choose 5');
+    //const allowEditing = (r.selected[0] === undefined && t === 'Choose 5');
 
     if (noData) {
       return (
-        <div className='Loader'>
-          <Loader active></Loader>
+        <div>
+          Loading
         </div>
       );
     } else {
       return(
         <div className='App'>
-          <Menu fixed='top' vertical borderless fluid>
-
-              <Menu.Item>
-                <Header floated='left' style={{ fontSize: '2em' }}>FiveTwoOne</Header>
-                <Button color='red' basic compact floated='right' style={{ marginTop: '0.2em' }}>Edit</Button>
-              </Menu.Item>
-              <Menu.Item>
-                <Step.Group size='mini' fluid unstackable>
-                  <Step title='5' />
-                  <Step title='2' />
-                  <Step title='1' />
-                </Step.Group>
-              </Menu.Item>
-          </Menu>
-          <Container text style={{ paddingTop: '9em' }}>
-            <List relaxed='very' divided verticalAlign='middle' size='big'>
+          <nav className='navbar sticky-top navbar-light bg-white border-bottom'>
+            <div className='container'>
+              <a className='navbar-brand' href='#' onClick={() => this.homeClicked()}><h1>FiveTwoOne</h1></a>
+              <button className='navbar-text btn-sm btn-outline-secondary'>Edit</button>
+            </div>
+          </nav>
+          <div className='container'>
+            <ul className='list-group list-group-flush'>
               {r.shown.map((step) => {
+                let listClassName = 'list-group-item';
+                if (r.selected.indexOf(step) >= 0) {
+                  listClassName += ' active';
+                }
                 return (
-                  <List.Item style={listItemStyle} key={step}>
-                    <Icon name='remove' style={{ display: 'none' }}></Icon>
+                  <li className={listClassName} key={step} onClick={() => this.listItemClicked(step)}>
                     {step}
-                  </List.Item>
+                  </li>
                 );
               })}
-              <List.Item style={listItemStyle}></List.Item>
-            </List>
-          </Container>
+            </ul>
+          </div>
         </div>
       );
     }
