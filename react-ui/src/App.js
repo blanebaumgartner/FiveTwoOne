@@ -115,22 +115,20 @@ class App extends Component {
           </nav>
           <div className='container'>
             <ul className='list-group list-group-flush'>
-              <CSSTransitionGroup transitionName='expand' transitionEnterTimeout={2000} transitionLeaveTimeout={2000}>
-                {shown.map((step) => {
-                  let listClassName = 'list-group-item';
-                  if (selected.indexOf(step) >= 0) {
-                    listClassName += ' active';
-                  }
-                  return (
-                    <li className={listClassName} key={step} onClick={() => this.listItemClicked(step)}>
-                      <div className='row'>
-                        <div className='col'>{step}</div>
-                        <div className='col' style={{textAlign: 'right'}}>{removeIcon(step)}</div>
-                      </div>
-                    </li>
-                  );
-                })}
-              </CSSTransitionGroup>
+              {shown.map((step) => {
+                let listClassName = 'list-group-item';
+                if (selected.indexOf(step) >= 0) {
+                  listClassName += ' active';
+                }
+                return (
+                  <li className={listClassName} key={step} onClick={() => this.listItemClicked(step)}>
+                    <div className='row'>
+                      <div className='col'>{step}</div>
+                      <div className='col' style={{textAlign: 'right'}}>{removeIcon(step)}</div>
+                    </div>
+                  </li>
+                );
+              })}
             </ul>
           </div>
         </div>
