@@ -11,3 +11,21 @@
 h1 {
     letter-spacing: -2px;
 }
+
+.expand-enter {
+    height: 0%;
+}
+  
+.expand-enter.example-enter-active {
+    height: 100%;
+    transition: height 2000ms ease-in;
+}
+
+.expand-leave {
+    height: 100%;
+}
+
+.expand-leave.example-leave-active {
+    height: 0%;
+    transition: height 2000ms ease-in;
+}

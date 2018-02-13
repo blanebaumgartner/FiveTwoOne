@@ -97,15 +97,25 @@ io.on('connection', (socket) => {
     if (status === 2) {
       status--;
       twoReached = false;
-      selected = [];
+      selected = restaurantsInTwo;
       shown = restaurantsInFive;
     } else if (status === 1) {
       status--;
       fiveReached = false;
-      selected = [];
+      selected = restaurantsInFive;
       shown = allRestaurants;
     } else if (status === 0) {
       selected = [];
+    }
+    sendAppData();
+  });
+
+  socket.on('clientClickedEdit', () => {
+    serverMessage('Client clicked Edit.');
+    if (status === -1) {
+      status = 0;
+    } else {
+      status = -1;
     }
     sendAppData();
   });
@@ -127,20 +137,10 @@ function sendAppData() {
 }
 
 function buildData() {
-  let title;
-  if (status === 0) {
-    title = 'Choose 5';
-  } else if (status === 1) {
-    title = 'Choose 2';
-  } else {
-    title = 'Choose 1';
-  }
   const data = {
-    title: title,
-    restaurants: {
-      shown: shown,
-      selected: selected
-    }
+    status: status,
+    shown: shown,
+    selected: selected
   }
   return data;
 }

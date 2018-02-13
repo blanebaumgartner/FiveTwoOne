@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-//import { CSSTransitionGroup } from 'react-transition-group';
-//import logo from './logo.svg';
+// import { CSSTransitionGroup } from 'react-transition-group';
+import {TransitionMotion, spring, presets} from 'react-motion'
 import './App.css';
 
 import io from 'socket.io-client';
@@ -13,40 +13,36 @@ class App extends Component {
 
     this.state = {
       receivedData: false,
-      title: '',
-      restaurants: {
-        shown: [],
-        selected: []
-      }
+      status: -1,
+      shown: [],
+      selected: []
     }
   }
 
   componentDidMount() {
     subscribeToServerUpdates((err, appData) => {
       this.setState({
-        receivedData: true,
-        title: appData.title,
-        restaurants: appData.restaurants
+        // receivedData: true,
+        status: appData.status,
+        shown: appData.shown,
+        selected: appData.selected
       });
     });
   }
 
   listItemClicked(item) {
     console.log('listItemClicked: ' + item);
-    let selectedRestaurants = this.state.restaurants.selected;
-    const i = selectedRestaurants.indexOf(item);
+    let selected = this.state.selected;
+    const i = selected.indexOf(item);
     if (i < 0) {
-      selectedRestaurants.push(item);
+      selected.push(item);
     } else {
-      selectedRestaurants.splice(i, 1);
+      selected.splice(i, 1);
     }
 
     this.setState((prevState) => {
       return {
-        restaurants: {
-          shown: prevState.restaurants.shown,
-          selected: selectedRestaurants
-        }
+        selected: selected
       };
     });
     socket.emit('clientClickedRestaurant', item);
@@ -56,40 +52,85 @@ class App extends Component {
     socket.emit('clientClickedReset');
   }
 
-  render() {
-    //const t = this.state.title;
-    const r = this.state.restaurants;
-    const noData = !this.state.receivedData;
-    //const allowEditing = (r.selected[0] === undefined && t === 'Choose 5');
+  backClicked() {
+    socket.emit('clientClickedBack');
+  }
 
-    if (noData) {
+  editClicked() {
+    socket.emit('clientClickedEdit');
+  }
+
+  removeClicked() {
+
+  }
+
+  render() {
+    const {status, shown, selected} = this.state;
+
+    if (false) {
+
       return (
         <div>
           Loading
         </div>
       );
+
     } else {
+
+      const shown = this.state.shown;
+      const selected = this.state.selected;
+      const status = this.state.status;
+
+      let backButton = null;
+      if (status > 0) {
+        backButton = <button className='navbar-text btn-sm btn-outline-secondary' onClick={() => this.backClicked()}>Back</button>;
+      }
+
+      let editButton = null;
+      if (status < 1 && selected[0] === undefined) {
+        let text = 'Edit';
+        if (status ===  -1) {
+          text = 'Done';
+        }
+        editButton = <button className='navbar-text btn-sm btn-outline-secondary' onClick={() => this.editClicked()}>{text}</button>;
+      }
+
+      let removeIcon = (restaurant) => {
+        return null;
+      }
+      if (status === -1) {
+        removeIcon = (restaurant) => {
+          return ( <i key={restaurant} onClick={() => this.removeClicked(restaurant)} className='fas fa-trash-alt'></i> );
+        }
+      }
+
       return(
         <div className='App'>
           <nav className='navbar sticky-top navbar-light bg-white border-bottom'>
             <div className='container'>
               <a className='navbar-brand' href='#' onClick={() => this.homeClicked()}><h1>FiveTwoOne</h1></a>
-              <button className='navbar-text btn-sm btn-outline-secondary'>Edit</button>
+              {backButton}
+              {editButton}
             </div>
           </nav>
           <div className='container'>
             <ul className='list-group list-group-flush'>
-              {r.shown.map((step) => {
-                let listClassName = 'list-group-item';
-                if (r.selected.indexOf(step) >= 0) {
-                  listClassName += ' active';
-                }
-                return (
-                  <li className={listClassName} key={step} onClick={() => this.listItemClicked(step)}>
-                    {step}
-                  </li>
-                );
-              })}
+              <CSSTransitionGroup transitionName='expand' transitionEnterTimeout={2000} transitionLeaveTimeout={2000}>
+                {shown.map((step) => {
+                  let listClassName = 'list-group-item';
+                  if (selected.indexOf(step) >= 0) {
+                    listClassName += ' active';
+                  }
+                  return (
+                    <li className={listClassName} key={step} onClick={() => this.listItemClicked(step)}>
+                      <div className='row'>
+                        <div className='col'>{step}</div>
+                        <div className='col' style={{textAlign: 'right'}}>{removeIcon(step)}</div>
+                      </div>
+                    </li>
+                  );
+                })}
+              </CSSTransitionGroup>
             </ul>
           </div>
         </div>
