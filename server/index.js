@@ -11,8 +11,15 @@ app.get('*', function(request, response) {
   response.sendFile(path.resolve(__dirname, '../react-ui/build', 'index.html'));
 });
 
-const fs = require('fs');
-const allRestaurants = require('./restaurants.json');
+let allRestaurants = [];
+
+const db = require('./db.js');
+
+db.getAllRestaurantsArray.then((result) => {
+  allRestaurants = result;
+  console.log(allRestaurants);
+  sendAppData();
+});
 
 let restaurantsInFive, restaurantsInTwo;
 let shown, selected;
@@ -138,6 +145,7 @@ function sendAppData() {
 
 function buildData() {
   const data = {
+    all: allRestaurants,
     status: status,
     shown: shown,
     selected: selected

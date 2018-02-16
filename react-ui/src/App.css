@@ -1,31 +1,48 @@
 .App {
-    max-width: 720px;
-    margin-left: auto;
-    margin-right: auto;
+  max-width: 720px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .navbar {
-    padding-top: 20px;
+  padding-top: 15px;
+}
+
+.buttonControl {
+  margin-right: 5px;
+}
+
+.btn-sm {
+  background: white;
+  width: 40px;
+  height: 27px;
+  padding: 0px;
+  margin-top: 6px;
+  font-size: 101%;
+  border: none;
 }
 
 h1 {
-    letter-spacing: -2px;
+  letter-spacing: -3px;
+  margin: 0px;
 }
 
-.expand-enter {
-    height: 0%;
-}
-  
-.expand-enter.example-enter-active {
-    height: 100%;
-    transition: height 2000ms ease-in;
+#listGroupId {
+  margin-top: -1px;
 }
 
-.expand-leave {
-    height: 100%;
+#noPadding {
+  padding-top: 0px;
+  padding-bottom: 0px;
 }
 
-.expand-leave.example-leave-active {
-    height: 0%;
-    transition: height 2000ms ease-in;
+#noPadding-noBorders {
+  padding-top: 0px;
+  padding-bottom: 0px;
+  border-top: none;
+}
+
+#somePadding {
+  padding-top: 10px;
+  padding-bottom: 10px;
 }

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 // import { CSSTransitionGroup } from 'react-transition-group';
 import {TransitionMotion, spring, presets} from 'react-motion'
+import { Collapse, UnmountClosed } from 'react-collapse';
 import './App.css';
 
 import io from 'socket.io-client';
@@ -14,8 +15,9 @@ class App extends Component {
     this.state = {
       receivedData: false,
       status: -1,
+      all: [],
       shown: [],
-      selected: []
+      selected: [],
     }
   }
 
@@ -24,6 +26,7 @@ class App extends Component {
       this.setState({
         // receivedData: true,
         status: appData.status,
+        all: appData.all,
         shown: appData.shown,
         selected: appData.selected
       });
@@ -60,8 +63,8 @@ class App extends Component {
     socket.emit('clientClickedEdit');
   }
 
-  removeClicked() {
-
+  removeClicked(r) {
+    console.log('clientClickedRemove: ' + r);
   }
 
   render() {
@@ -76,60 +79,98 @@ class App extends Component {
       );
 
     } else {
-
+      const all = this.state.all;
       const shown = this.state.shown;
       const selected = this.state.selected;
       const status = this.state.status;
 
-      let backButton = null;
-      if (status > 0) {
-        backButton = <button className='navbar-text btn-sm btn-outline-secondary' onClick={() => this.backClicked()}>Back</button>;
-      }
+      // let backButton = null;
+      // if (status > 0) {
+      //   backButton = <i onClick={() => this.backClicked()} className='fas fa-angle-left'></i>;
+      // }
 
-      let editButton = null;
-      if (status < 1 && selected[0] === undefined) {
-        let text = 'Edit';
-        if (status ===  -1) {
-          text = 'Done';
-        }
-        editButton = <button className='navbar-text btn-sm btn-outline-secondary' onClick={() => this.editClicked()}>{text}</button>;
-      }
+      // let editButton = null;
+      // if (status < 1 && selected[0] === undefined) {
+      //   let editIconClassName='fas fa-cog';
+      //   if (status ===  -1) {
+      //     editIconClassName = 'fas fa-check';
+      //   }
+      //   editButton =
+      //     <i className={editIconClassName}
+      //                   onClick={() => this.editClicked()}>
+      //     </i>
+      //   ;
+      // }
 
       let removeIcon = (restaurant) => {
         return null;
       }
       if (status === -1) {
         removeIcon = (restaurant) => {
-          return ( <i key={restaurant} onClick={() => this.removeClicked(restaurant)} className='fas fa-trash-alt'></i> );
+          return (
+            <i key={restaurant}
+               onClick={() => this.removeClicked(restaurant)}
+               className='fas fa-times'>
+            </i>
+          );
+        }
+      }
+
+      let backButtonShow = () => {
+        if(status > 0) {
+          return <i onClick={() => this.backClicked()} className='fas fa-angle-left'></i>;
+
+        }
+        return null;
+      }
+
+      let editButtonShow = () => {
+        if (status === 0 && selected[0] === undefined) {
+          return <i className='fas fa-cog' onClick={() => this.editClicked()}></i>
+        }
+        return null;
+      }
+
+      let doneButtonShow = () => {
+        if (status === -1) {
+          return <i className='fas fa-check' onClick={() => this.editClicked()}></i>
         }
       }
 
       return(
         <div className='App'>
           <nav className='navbar sticky-top navbar-light bg-white border-bottom'>
-            <div className='container'>
-              <a className='navbar-brand' href='#' onClick={() => this.homeClicked()}><h1>FiveTwoOne</h1></a>
-              {backButton}
-              {editButton}
+            <a className='navbar-brand' href='#' onClick={() => this.homeClicked()}><h1><strong>FiveTwoOne</strong></h1></a>
+            <div className='buttonControl'>
+              {backButtonShow()}
+              {editButtonShow()}
+              {doneButtonShow()}
             </div>
           </nav>
-          <div className='container'>
-            <ul className='list-group list-group-flush'>
-              {shown.map((step) => {
+          <div id='listGroupId' className='container'>
+            <div className='list-group list-group-flush'>
+              {all.map((step) => {
                 let listClassName = 'list-group-item';
                 if (selected.indexOf(step) >= 0) {
                   listClassName += ' active';
                 }
+                const isOpened = shown.indexOf(step) >= 0;
+                
+                let collapseId = 'noPadding';
+                if (!isOpened) {
+                  collapseId += '-noBorders';
+                }
+
                 return (
-                  <li className={listClassName} key={step} onClick={() => this.listItemClicked(step)}>
-                    <div className='row'>
+                  <Collapse isOpened={isOpened} id={collapseId} className={listClassName} key={step} onClick={() => this.listItemClicked(step)}>
+                    <div className='row' id='somePadding'>
                       <div className='col'>{step}</div>
                       <div className='col' style={{textAlign: 'right'}}>{removeIcon(step)}</div>
                     </div>
-                  </li>
+                  </Collapse>
                 );
               })}
-            </ul>
+            </div>
           </div>
         </div>
       );

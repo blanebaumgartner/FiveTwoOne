@@ -7,6 +7,8 @@ dev
 *.env
 *.dev
 .DS_Store
+react-ui/src/archive/
+server/defaultRestaurants.json
 
 # Docker
 Dockerfile
