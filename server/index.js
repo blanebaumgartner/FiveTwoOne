@@ -13,6 +13,10 @@ app.get('*', function(request, response) {
 
 const db = require('./db.js');
 
+//dev only!
+devRestaurants = ["Applebee's","Arby's","Bandidos","Blaze Pizza","Buffalo Wild Wings","Burger King","Cebollas","Chipotle","Dairy Queen","Flat Top Grill","Logan's","McDonald's","Olive Garden","Panda Express","Panera Bread","Penn Station","Qdoba","Red Robin","Sara's Diner","Smokey Bones","Subway","Taco Bell"];
+db.addArrayOfRestaurants(devRestaurants);
+
 let allRestaurants = [];
 
 db.getAllRestaurantsArray.then((result) => {
@@ -91,10 +95,11 @@ io.on('connection', (socket) => {
   socket.on('clientRemovedRestaurant', (r) => {
     const i = allRestaurants.indexOf(r);
     allRestaurants.splice(i, 1);
-    const json = JSON.stringify(allRestaurants);
-    fs.writeFile('server/restaurants.json', json, 'utf8', () => {
-      serverMessage('Removed ' + r + ' and wrote file.')
-    });
+    db.deleteArrayOfRestaurants([r]);
+    // const json = JSON.stringify(allRestaurants);
+    // fs.writeFile('server/restaurants.json', json, 'utf8', () => {
+    //   serverMessage('Removed ' + r + ' and wrote file.')
+    // });
     sendAppData();
   });
 

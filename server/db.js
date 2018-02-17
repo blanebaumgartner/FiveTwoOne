@@ -6,14 +6,20 @@ const collectionName = 'devices';
 // const fs = require('fs');
 // const allRestaurants = require('./defaultRestaurants.json');
 
+const idArrayToDocs = (idArray) => {
+  let docs = [];
+  idArray.forEach((itemId) => {
+    docs.push({ id_: itemId });
+  });
+  return docs;
+};
+
 const logAllRestaurants = () => {
   MongoClient.connect(mongodbUri, (err, client) => {
     client.db(dbName).collection(collectionName, (err, collection) => {
       collection.find().toArray((err, docs) => {
-        let restaurants = [];
         docs.forEach((doc) => {
-          console.log(doc.restaurant);
-          restaurants.push(doc.restaurant);
+          console.log(doc._id);
         });
       });
       client.close();
@@ -27,7 +33,7 @@ const getAllRestaurantsArray = new Promise((resolve, reject) => {
       collection.find().toArray((err, docs) => {
         let restaurants = [];
         docs.forEach((doc) => {
-          restaurants.push(doc.restaurant);
+          restaurants.push(doc._id);
         });
         resolve(restaurants);
         client.close();
@@ -41,18 +47,12 @@ const addArrayOfRestaurants = (restaurantArray) => {
     console.log('DB: No restaurants added.');
     return;
   }
-  let docs = [];
-  restaurantArray.forEach((restaurant) => {
-    docs.push({ restaurant: restaurant });
-  });
+  const docs = idArrayToDocs(restaurantArray);
   MongoClient.connect(mongodbUri, (err, client) => {
     client.db(dbName).collection(collectionName, (err, collection) => {
-      collection.insertMany(docs, (err, result) => {
-        // console.log(result.ops);
-        // logAllRestaurants();
-      });
+      collection.insertMany(docs);
+      client.close();
     });
-    client.close();
   });
 };
 
@@ -60,13 +60,12 @@ const deleteArrayOfRestaurants = (restaurantArray) => {
   MongoClient.connect(mongodbUri, (err, client) => {
     client.db(dbName).collection(collectionName, (err, collection) => {
       restaurantArray.forEach((restaurant) => {
-        const filter = { restaurant: restaurant };
+        const filter = { _id: restaurant };
         collection.deleteOne(filter)
         .then((result) => {
-          console.log(result);
+
         });
       });
-      logAllRestaurants();
     });
     client.close();
   });

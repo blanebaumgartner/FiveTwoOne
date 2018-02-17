@@ -64,7 +64,7 @@ class App extends Component {
   }
 
   removeClicked(r) {
-    console.log('clientClickedRemove: ' + r);
+    socket.emit('clientRemovedRestaurant', r);
   }
 
   render() {
