@@ -11,21 +11,18 @@ app.get('*', function(request, response) {
   response.sendFile(path.resolve(__dirname, '../react-ui/build', 'index.html'));
 });
 
-let allRestaurants = [];
-
 const db = require('./db.js');
+
+let allRestaurants = [];
 
 db.getAllRestaurantsArray.then((result) => {
   allRestaurants = result;
-  console.log(allRestaurants);
-  sendAppData();
+  initializeData();
 });
 
 let restaurantsInFive, restaurantsInTwo;
 let shown, selected;
 let fiveReached, twoReached;
-
-initializeData();
 
 function initializeData() {
   restaurantsInFive = [];
@@ -82,10 +79,12 @@ io.on('connection', (socket) => {
   socket.on('clientAddedRestaurant', (r) => {
     allRestaurants.push(r);
     allRestaurants.sort();
-    const json = JSON.stringify(allRestaurants);
-    fs.writeFile('server/restaurants.json', json, 'utf8', () => {
-      serverMessage('Added ' + r + ' to file');
-    });
+    db.addArrayOfRestaurants([r]);
+    db.logAllRestaurants();
+    // const json = JSON.stringify(allRestaurants);
+    // fs.writeFile('server/restaurants.json', json, 'utf8', () => {
+    //   serverMessage('Added ' + r + ' to file');
+    // });
     sendAppData();
   });
 
@@ -141,6 +140,7 @@ server.listen(port, () => {
 function sendAppData() {
   const appData = buildData();
   io.emit('appDataUpdate', appData);
+  serverMessage('Sent app data to all clients.');
 }
 
 function buildData() {

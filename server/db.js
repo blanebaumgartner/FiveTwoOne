@@ -48,8 +48,8 @@ const addArrayOfRestaurants = (restaurantArray) => {
   MongoClient.connect(mongodbUri, (err, client) => {
     client.db(dbName).collection(collectionName, (err, collection) => {
       collection.insertMany(docs, (err, result) => {
-        console.log(result.ops);
-        logAllRestaurants();
+        // console.log(result.ops);
+        // logAllRestaurants();
       });
     });
     client.close();
