@@ -14,8 +14,8 @@ app.get('*', function(request, response) {
 const db = require('./db.js');
 
 //dev only!
-devRestaurants = ["Applebee's","Arby's","Bandidos","Blaze Pizza","Buffalo Wild Wings","Burger King","Cebollas","Chipotle","Dairy Queen","Flat Top Grill","Logan's","McDonald's","Olive Garden","Panda Express","Panera Bread","Penn Station","Qdoba","Red Robin","Sara's Diner","Smokey Bones","Subway","Taco Bell"];
-db.addArrayOfRestaurants(devRestaurants);
+//devRestaurants = ["Applebee's","Arby's","Bandidos","Blaze Pizza","Buffalo Wild Wings","Burger King","Cebollas","Chipotle","Dairy Queen","Flat Top Grill","Logan's","McDonald's","Olive Garden","Panda Express","Panera Bread","Penn Station","Qdoba","Red Robin","Sara's Diner","Smokey Bones","Subway","Taco Bell"];
+//db.addArrayOfRestaurants(devRestaurants);
 
 let allRestaurants = [];
 

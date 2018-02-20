@@ -9,7 +9,7 @@ const collectionName = 'devices';
 const idArrayToDocs = (idArray) => {
   let docs = [];
   idArray.forEach((itemId) => {
-    docs.push({ id_: itemId });
+    docs.push({ _id: itemId });
   });
   return docs;
 };
@@ -85,3 +85,5 @@ module.exports.logAllRestaurants = logAllRestaurants;
 module.exports.getAllRestaurantsArray = getAllRestaurantsArray;
 module.exports.addArrayOfRestaurants = addArrayOfRestaurants;
 module.exports.deleteArrayOfRestaurants = deleteArrayOfRestaurants;
+
+logAllRestaurants();
