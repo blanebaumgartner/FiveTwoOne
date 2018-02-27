@@ -87,7 +87,11 @@ class App extends Component {
     if (r === null || r === '') {
       return;
     }
-    this.nameInput.focus();
+    this.nameInput.value = '';
+    this.setState({
+      addRestaurantValue: ''
+    });
+    document.getElementById('addRestaurantModal').modal('toggle');
     socket.emit('clientAddedRestaurant', r);
   }
 
