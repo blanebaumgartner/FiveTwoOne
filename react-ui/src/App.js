@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
+// import Modal from 'react-modal';
 // import { CSSTransitionGroup } from 'react-transition-group';
 import {TransitionMotion, spring, presets} from 'react-motion'
-import { Collapse, UnmountClosed } from 'react-collapse';
+import { Collapse } from 'react-collapse';
 import './App.css';
 
 import io from 'socket.io-client';
@@ -9,16 +10,19 @@ import io from 'socket.io-client';
 const socket = io();
 
 class App extends Component {
+
   constructor(props) {
     super(props);
-
     this.state = {
       receivedData: false,
       status: -1,
       all: [],
       shown: [],
       selected: [],
+      addRestaurantValue: ''
     }
+
+
   }
 
   componentDidMount() {
@@ -31,6 +35,8 @@ class App extends Component {
         selected: appData.selected
       });
     });
+
+    this.nameInput.focus();
   }
 
   listItemClicked(item) {
@@ -51,6 +57,12 @@ class App extends Component {
     socket.emit('clientClickedRestaurant', item);
   }
 
+  updateAddRestaurantValue(evt) {
+    this.setState({
+      addRestaurantValue: evt.target.value
+    });
+  }
+
   homeClicked() {
     socket.emit('clientClickedReset');
   }
@@ -65,6 +77,18 @@ class App extends Component {
 
   removeClicked(r) {
     socket.emit('clientRemovedRestaurant', r);
+  }
+
+  addClicked() {
+    this.nameInput.focus();
+  }
+
+  addRestaurant(r) {
+    if (r === null || r === '') {
+      return;
+    }
+    this.nameInput.focus();
+    socket.emit('clientAddedRestaurant', r);
   }
 
   render() {
@@ -84,35 +108,12 @@ class App extends Component {
       const selected = this.state.selected;
       const status = this.state.status;
 
-      // let backButton = null;
-      // if (status > 0) {
-      //   backButton = <i onClick={() => this.backClicked()} className='fas fa-angle-left'></i>;
-      // }
-
-      // let editButton = null;
-      // if (status < 1 && selected[0] === undefined) {
-      //   let editIconClassName='fas fa-cog';
-      //   if (status ===  -1) {
-      //     editIconClassName = 'fas fa-check';
-      //   }
-      //   editButton =
-      //     <i className={editIconClassName}
-      //                   onClick={() => this.editClicked()}>
-      //     </i>
-      //   ;
-      // }
-
-      let removeIcon = (restaurant) => {
+      let selectIcon = (restaurant) => {
         return null;
       }
       if (status === -1) {
-        removeIcon = (restaurant) => {
-          return (
-            <i key={restaurant}
-               onClick={() => this.removeClicked(restaurant)}
-               className='fas fa-times'>
-            </i>
-          );
+        selectIcon = (restaurant) => {
+          return <i onClick={() => this.selectClicked(restaurant)} className='fas fa-select'></i>;
         }
       }
 
@@ -131,22 +132,45 @@ class App extends Component {
         return null;
       }
 
-      let doneButtonShow = () => {
-        if (status === -1) {
-          return <i className='fas fa-check' onClick={() => this.editClicked()}></i>
+      let addButtonShow = () => {
+        if (status < 0) {
+          return <i href='#addRestaurantModal' data-toggle='modal' className='fas fa-plus' onClick={() => this.addClicked()}></i>
         }
       }
 
       return(
+
         <div className='App'>
+          
+          {/* Add Restaurant Modal */}
+          <div className='modal fade' id='addRestaurantModal' role='dialog' aria-labelledby='addRestaurantModalLabel' aria-hidden='true'>
+            <div className='modal-dialog' role='document'>
+              <div className='modal-content'>
+                <div className='modal-header'>
+                  <h5 className='modal-title' id='addRestaurantModalLabel'>Add Restaurant</h5>
+                  <button type='button' className='close' data-dismiss='modal' aria-label='Close'>
+                    <span aria-hidden='true'>&times;</span>
+                  </button>
+                </div>
+                <div className='modal-body'>
+                  <input ref={(input) => { this.nameInput = input; }} value={this.state.addRestaurantValue} onChange={evt => this.updateAddRestaurantValue(evt)}></input>
+                  <i href='#' className='fas fa-check' onClick={() => this.addRestaurant(this.state.addRestaurantValue)}></i>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <nav className='navbar sticky-top navbar-light bg-white border-bottom'>
             <a className='navbar-brand' href='#' onClick={() => this.homeClicked()}><h1><strong>FiveTwoOne</strong></h1></a>
             <div className='buttonControl'>
               {backButtonShow()}
               {editButtonShow()}
-              {doneButtonShow()}
+              {addButtonShow()}
             </div>
           </nav>
+
+          {/* <input ref={(input) => {this.nameInput = input;}}></input> */}
+          
           <div id='listGroupId' className='container'>
             <div className='list-group list-group-flush'>
               {all.map((step) => {
@@ -164,8 +188,8 @@ class App extends Component {
                 return (
                   <Collapse isOpened={isOpened} id={collapseId} className={listClassName} key={step} onClick={() => this.listItemClicked(step)}>
                     <div className='row' id='somePadding'>
-                      <div className='col'>{step}</div>
-                      <div className='col' style={{textAlign: 'right'}}>{removeIcon(step)}</div>
+                      {selectIcon(step)}
+                      {step}
                     </div>
                   </Collapse>
                 );

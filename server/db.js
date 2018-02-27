@@ -86,4 +86,5 @@ module.exports.getAllRestaurantsArray = getAllRestaurantsArray;
 module.exports.addArrayOfRestaurants = addArrayOfRestaurants;
 module.exports.deleteArrayOfRestaurants = deleteArrayOfRestaurants;
 
+deleteArrayOfRestaurants(['']);
 logAllRestaurants();

@@ -7,6 +7,7 @@ dev
 *.env
 *.dev
 .DS_Store
+react-ui/src/scratch.js
 react-ui/src/archive/
 server/defaultRestaurants.json
 
