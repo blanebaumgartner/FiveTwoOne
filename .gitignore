@@ -1,18 +1,14 @@
-# Node build artifacts
-node_modules
-npm-debug.log
-dev
-
-# Local development
-*.env
-*.dev
 .DS_Store
-react-ui/src/scratch.js
-react-ui/src/archive/
-server/defaultRestaurants.json
+node_modules/
+/dist/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
-# Docker
-Dockerfile
-docker-compose.yml
-
-dev
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
