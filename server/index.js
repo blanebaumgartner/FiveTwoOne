@@ -27,6 +27,7 @@ db.getAllRestaurantsArray.then((result) => {
 let restaurantsInFive, restaurantsInTwo;
 let shown, selected;
 let fiveReached, twoReached;
+let status;
 
 function initializeData() {
   restaurantsInFive = [];

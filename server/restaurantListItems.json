@@ -1,0 +1,10 @@
+{
+  "restaurants": [
+    {
+      "id": 1,
+      "name": "Applebee's",
+      "render": true,
+      "selected": true
+    }
+  ]
+}
