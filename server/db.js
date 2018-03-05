@@ -3,9 +3,6 @@ const mongodbUri = "mongodb+srv://bbaumgartner21:Camera21!@cluster0-rkwks.mongod
 const dbName = 'ftodb';
 const collectionName = 'devices';
 
-// const fs = require('fs');
-// const allRestaurants = require('./defaultRestaurants.json');
-
 const idArrayToDocs = (idArray) => {
   let docs = [];
   idArray.forEach((itemId) => {
@@ -19,7 +16,7 @@ const logAllRestaurants = () => {
     client.db(dbName).collection(collectionName, (err, collection) => {
       collection.find().toArray((err, docs) => {
         docs.forEach((doc) => {
-          console.log(doc._id);
+          //console.log(doc._id);
         });
       });
       client.close();
@@ -31,9 +28,8 @@ const getAllRestaurantsArray = new Promise((resolve, reject) => {
   MongoClient.connect(mongodbUri, (err, client) => {
     client.db(dbName).collection(collectionName, (err, collection) => {
       collection.find().toArray((err, docs) => {
-        let restaurants = [];
-        docs.forEach((doc) => {
-          restaurants.push(doc._id);
+        const restaurants = docs.map((doc) => {
+          return doc._id;
         });
         resolve(restaurants);
         client.close();
@@ -44,7 +40,7 @@ const getAllRestaurantsArray = new Promise((resolve, reject) => {
 
 const addArrayOfRestaurants = (restaurantArray) => {
   if (restaurantArray[0] === undefined) {
-    console.log('DB: No restaurants added.');
+    console.log('[DB]: No restaurants added.');
     return;
   }
   const docs = idArrayToDocs(restaurantArray);
