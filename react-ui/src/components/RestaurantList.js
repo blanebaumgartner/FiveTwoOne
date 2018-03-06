@@ -3,10 +3,9 @@ import List from './List.js';
 
 class RestaurantList extends React.Component {
   restaurantsToListItems(restaurants) {
-    let listItems = [];
-    restaurants.forEach((restaurant) => {
-      listItems.push({
-        id: restaurant.id,
+    const listItems = restaurants.map((restaurant) => {
+      return({
+        id: restaurant.name,
         text: restaurant.name,
         render: restaurant.render,
         active: restaurant.selected

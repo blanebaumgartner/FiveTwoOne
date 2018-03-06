@@ -2,6 +2,10 @@ import io from 'socket.io-client';
 
 const socket = io();
 
+const clientOn = (eventName, cb) => {
+  socket.on(eventName, cb);
+};
+
 const clientEmit = (eventName, data = null) => {
   if (data === null) {
     socket.emit(eventName);
@@ -10,8 +14,4 @@ const clientEmit = (eventName, data = null) => {
   }
 };
 
-const clientOn = (eventName, cb) => {
-  socket.on(eventName, cb);
-};
-
-export { clientEmit as default, clientOn };
+export { clientOn, clientEmit };

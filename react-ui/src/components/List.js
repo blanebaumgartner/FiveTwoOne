@@ -5,6 +5,7 @@ import AddListItem from './AddListItem';
 class List extends React.Component {
   render() {
     const items = this.props.items;
+    const editMode = this.props.editMode;
     const options = this.props.options;
 
     const addNewItemHint = (() => {
@@ -14,13 +15,13 @@ class List extends React.Component {
       return "Add new item...";
     })();
 
-    const editMode = this.props.editMode;
     const addListItem = (() => {
       if (editMode) {
         return <AddListItem text={addNewItemHint} />
       }
       return null;
     })();
+
     return (
       <div id='listGroupId' className='container'>
         <div className='list-group list-group-flush'>

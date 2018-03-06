@@ -1,7 +1,7 @@
 import React from 'react';
 import NavBarButton from './NavBarButton';
 import '../css/NavBar.css';
-import clientEmit from '../js/ioApi.js';
+import { clientEmit } from '../js/ioApi.js';
 
 class NavBar extends React.Component {
   clientReset() {

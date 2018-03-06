@@ -25,11 +25,13 @@ class App extends React.Component {
 
   render() {
     let navBarTitle = 'FiveTwoOne';
+    const restaurants = this.state.restaurants;
+    const status = this.state.status;
 
     return(
       <div className='App'>
-        <NavBar title={navBarTitle} status={this.state.status}/>
-        <RestaurantList restaurants={this.state.restaurants} status={this.state.status} />
+        <NavBar title={navBarTitle} status={status} />
+        <RestaurantList restaurants={restaurants} status={status} />
       </div>
     );
   }
