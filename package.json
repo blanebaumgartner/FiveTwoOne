@@ -8,7 +8,7 @@
   },
   "scripts": {
     "start": "node server",
-    "dev": "clear && nodemon server --ignore react-ui/",
+    "dev": "nodemon server",
     "heroku-postbuild": "cd react-ui/ && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
   },
   "cacheDirectories": [
@@ -26,5 +26,8 @@
   },
   "devDependencies": {
     "nodemon": "^1.17.1"
+  },
+  "nodemonConfig": {
+    "ignore": ["react-ui/"]
   }
 }

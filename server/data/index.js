@@ -1,7 +1,7 @@
 const db = require('../db');
 const { svrmsg, svrerr } = require('../util');
 
-class Restaurants {
+class Data {
   constructor() {
     this.restaurants = [];
   }
@@ -44,4 +44,4 @@ class Restaurants {
   }
 }
 
-module.exports = Restaurants;
+module.exports = Data;
