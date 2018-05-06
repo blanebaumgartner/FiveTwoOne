@@ -8,7 +8,6 @@
   },
   "scripts": {
     "start": "node server",
-    "dev": "nodemon server",
     "heroku-postbuild": "cd react-ui/ && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
   },
   "cacheDirectories": [
@@ -23,11 +22,5 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/blanebaumgartner/FiveTwoOne"
-  },
-  "devDependencies": {
-    "nodemon": "^1.17.1"
-  },
-  "nodemonConfig": {
-    "ignore": ["react-ui/"]
   }
 }

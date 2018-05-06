@@ -1,0 +1,55 @@
+.App {
+  max-width: 720px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.navbar {
+  padding-top: 15px;
+}
+
+.buttonControl {
+  margin-right: 5px;
+}
+
+.btn-sm {
+  background: white;
+  width: 40px;
+  height: 27px;
+  padding: 0px;
+  margin-top: 6px;
+  font-size: 101%;
+  border: none;
+}
+
+h1 {
+  letter-spacing: -3px;
+  margin: 0px;
+}
+
+#listGroupId {
+  margin-top: -1px;
+}
+
+#noPadding {
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
+
+#noPadding-noBorders {
+  padding-top: 0px;
+  padding-bottom: 0px;
+  border-top: none;
+}
+
+#somePadding {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+#addRestaurantInput {
+  width: 100%;
+  border: none;
+  padding: 0;
+  margin: 0;
+}
