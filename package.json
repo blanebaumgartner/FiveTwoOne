@@ -8,7 +8,8 @@
   },
   "scripts": {
     "start": "node server",
-    "heroku-postbuild": "cd react-ui/ && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
+    "heroku-postbuild": "cd react-ui/ && npm install && npm install --only=dev --no-shrinkwrap && npm run build",
+    "postinstall": "cd react-ui/ && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
   },
   "cacheDirectories": [
     "node_modules",
@@ -17,6 +18,7 @@
   "dependencies": {
     "express": "^4.16.2",
     "mongodb": "^3.0.2",
+    "newrelic": "^4.1.0",
     "socket.io": "^2.0.4"
   },
   "repository": {
